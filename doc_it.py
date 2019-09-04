@@ -40,7 +40,10 @@ def get_thingy(type_of_thingy, line_list, idx, pause_characters=False):
     else:
 
         if line_list[idx].startswith(" ") and line_list[idx].strip().split(" ")[0] == str(type_of_thingy):
-            return_list.append(line_list[idx].strip().split("{} ".format(str(type_of_thingy)))[1])
+            try:
+                return_list.append(line_list[idx].strip().split("{} ".format(str(type_of_thingy)))[1])
+            except IndexError:
+                pass
         if idx + 1 < len(line_list)\
                   and not line_list[idx+1].strip().startswith("class") \
                   and not line_list[idx+1].strip().startswith("def"):
