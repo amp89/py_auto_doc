@@ -174,7 +174,8 @@ def document_module(module_path, file_obj):
                 return_list = get_thingy("return", line_list, idx)
                 exception_list = get_thingy("raise", line_list, idx)
                 annotation_list = get_annotation_list(line_list, idx)
-                dep_list = get_deps(line_list, idx)
+                #dep_list = get_deps(line_list, idx)
+                dep_list = None
                 write_data(file_obj, current_module, dep_list, annotation_list, current_class, inheritance_list, attribute_list, current_function, args_list, return_list, exception_list)
               
             elif line.startswith(" ") and "def " in line:
@@ -183,7 +184,8 @@ def document_module(module_path, file_obj):
                 return_list = get_thingy("return", line_list, idx)
                 exception_list = get_thingy("raise", line_list, idx)
                 annotation_list = get_annotation_list(line_list, idx)
-                dep_list = get_deps(line_list, idx)
+                #dep_list = get_deps(line_list, idx)
+                dep_list = None
                 write_data(file_obj, current_module, dep_list, annotation_list, current_class, inheritance_list, attribute_list, current_function, args_list, return_list, exception_list)
               
 
