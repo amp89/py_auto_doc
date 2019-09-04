@@ -8,7 +8,7 @@ run from root dir of project
 '''
 EXCLUDE_DIR = ["venv", ".ipynb_checkpoints","ipynb"]
 EXCLUDE_FILE = ["__init__"]
-EXCLUDE_DEPS = ["print","list","enumerate"]
+EXCLUDE_DEPS = ["print","list","enumerate","Exception"]
 
 def get_annotation_list(line_list, idx):
     annotation_list = []
@@ -72,6 +72,8 @@ def get_deps(line_list, idx):
           and not line_list[idx+1].strip().startswith("class") \
           and not line_list[idx+1].strip().startswith("def"):
         return_list = return_list + get_deps(line_list, idx+1)
+    return_list = [x for x in return_list if x not in EXCLUDE_DEPS]
+    return_list = list(set(return_list))
     return return_list
     
 def get_import_list(line_list):
