@@ -9,6 +9,7 @@ run from root dir of project
 EXCLUDE_DIR = ["venv", ".ipynb_checkpoints","ipynb"]
 EXCLUDE_FILE = ["__init__", "auto_doc"]
 EXCLUDE_DEPS = ["print","list","enumerate","Exception"]
+EXCLUDE_ARG = ["self"]
 
 def get_annotation_list(line_list, idx):
     annotation_list = []
@@ -24,6 +25,7 @@ def get_f_args(line):
     except IndexError:
         return []
     arg_list = [a.strip() for a in arg_csv.split(",") if a != ""]
+    arg_list = [a for a in arg_list if a not in EXCLUDE_ARG]
     return arg_list
 
 def get_thingy(type_of_thingy, line_list, idx, pause_characters=False):
@@ -93,7 +95,9 @@ def get_import_list(line_list):
             imports += import_list
         elif (line.startswith('from') and 'import' in line):
             import_list = line.replace("from","").strip().split("import")[-1].split(",")
-            import_list = [x.strip() for x in import_list]
+            first_part = line.replace("from","").strip().split("import")[0]
+            import_list = [first_part + x.strip() for x in import_list]
+            import_list = [x.replace(" ",".") for x in import_list]
             imports += import_list
     return imports
 
