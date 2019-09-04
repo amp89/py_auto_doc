@@ -97,16 +97,16 @@ def get_import_list(line_list):
             import_list = line.replace("from","").strip().split("import")[-1].split(",")
             first_part = line.replace("from","").strip().split("import")[0]
             import_list = [first_part + x.strip() for x in import_list]
-            import_list = [x.replace(" ",".") for x in import_list]
+            import_list = [x.replace(" ",".").replace(":","") for x in import_list]
             imports += import_list
     return imports
 
 def write_lines(file_obj, header, iter_list):
     if iter_list:
-        sys.stdout.write("\n\n{}:".format(str(header)))
-        file_obj.write("\n\n{}:".format(str(header)))
+        sys.stdout.write("\n\n#### {}".format(str(header)))
+        file_obj.write("\n\n#### {}".format(str(header)))
         for i in iter_list:
-            this_line = "\n\n- {}".format(str(i))
+            this_line = "\n- {}".format(str(i))
             sys.stdout.write(this_line)
             file_obj.write(this_line)
 
