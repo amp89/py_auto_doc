@@ -7,7 +7,7 @@ DEP_RE = re.compile(r"(\s*\.*)(\w+\()")
 run from root dir of project
 '''
 EXCLUDE_DIR = ["venv", ".ipynb_checkpoints","ipynb"]
-EXCLUDE_FILE = ["__init__"]
+EXCLUDE_FILE = ["__init__", "auto_doc"]
 EXCLUDE_DEPS = ["print","list","enumerate","Exception"]
 
 def get_annotation_list(line_list, idx):
@@ -137,7 +137,7 @@ def write_import_list(file_obj, import_list):
 def document_module(module_path, file_obj):
     module_name = module_path.rstrip(".py").replace("./","").replace(".","").replace("\\",".").replace("/",".").lstrip(".")
     
-    file_obj.write("# {}\n".format(str(module_name)))
+    file_obj.write("\n\n# {}\n".format(str(module_name)))
     with open(module_path, "r") as f:
         current_class = None
         current_function = None
