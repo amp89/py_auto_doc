@@ -116,7 +116,7 @@ def write_data(file_obj, current_module=None, dep_list=None, annotation_list=Non
 
     full_module_parts_list = list(filter(lambda x: x, [current_module,current_class,current_function]))
     full_module_str = ".".join(full_module_parts_list)
-    full_module_str = "\n\n####{}".format(str(full_module_str))
+    full_module_str = "\n\n#### {}".format(str(full_module_str))
 
     sys.stdout.write(full_module_str)
     file_obj.write(full_module_str)
