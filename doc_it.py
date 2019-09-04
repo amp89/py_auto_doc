@@ -60,6 +60,7 @@ def get_attributes(line_list, idx):
     if idx + 1 < len(line_list) \
               and not line_list[idx+1].strip().startswith("class"):
         attr_list = attr_list + get_attributes(line_list, idx+1)
+    attr_list = [x for x in attr_list if "(" not in x]
     return attr_list
 
 def get_deps(line_list, idx):
