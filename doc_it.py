@@ -1,11 +1,14 @@
 import scandir
 import sys
 import os
+import re
+DEP_RE = re.compile(r"(\s*\.*)(\w+\()")
 '''
 run from root dir of project
 '''
 EXCLUDE_DIR = ["venv", ".ipynb_checkpoints","ipynb"]
 EXCLUDE_FILE = ["__init__"]
+EXCLUDE_DEPS = ["print","list","enumerate"]
 
 def get_annotation_list(line_list, idx):
     annotation_list = []
@@ -61,13 +64,14 @@ def get_attributes(line_list, idx):
 
 def get_deps(line_list, idx):
     return_list = []
-#     if not line_list[idx].strip().startswith("def") and not line_list[idx].strip().startswith("class") \
-#             and line_list[idx].strip().endswith(")")
-#         return_list.append(line_list[idx].strip().split("{} ".format(str(type_of_thingy)))[1])
-#     if idx + 1 < len(line_list) and line_list[idx+1].startswith(" ") \
-#               and not line_list[idx+1].strip().startswith("class") \
-#               and not line_list[idx+1].strip().startswith("def"):
-#         return_list = return_list + get_thingy(type_of_thingy, line_list, idx+1)
+    if not line_list[idx].strip().startswith("def") and not line_list[idx].strip().startswith("class") \
+            and ")" in line_list[idx].split("#")[0].strip() and "(" in line_list[idx].split("#")[0].strip():
+        re_matches = re.findall(string=line_list[idx].split("#")[0].strip(), pattern=DEP_RE)
+        return_list = [thing[1].strip("(").strip(".").strip() for thing in re_matches]
+    if idx + 1 < len(line_list) and line_list[idx+1].startswith(" ") \
+          and not line_list[idx+1].strip().startswith("class") \
+          and not line_list[idx+1].strip().startswith("def"):
+        return_list = return_list + get_deps(line_list, idx+1)
     return return_list
     
 def get_import_list(line_list):
@@ -92,7 +96,7 @@ def write_lines(file_obj, header, iter_list):
             sys.stdout.write(this_line)
             file_obj.write(this_line)
 
-def write_data(file_obj, current_module=None, annotation_list=None, current_class=None,\
+def write_data(file_obj, current_module=None, dep_list=None, annotation_list=None, current_class=None,\
                         inheritance_list=None, attribute_list=None, current_function=None,
                         args_list=None, return_list=None, exception_list=None):
 
@@ -105,6 +109,7 @@ def write_data(file_obj, current_module=None, annotation_list=None, current_clas
     
     write_lines(file_obj, header="Inherits from", iter_list=inheritance_list)
     write_lines(file_obj, header="Attributes", iter_list=attribute_list)
+    write_lines(file_obj, header="Dependencies", iter_list=dep_list)
     
     write_lines(file_obj, header="Arguments", iter_list=args_list)
     write_lines(file_obj, header="Returns", iter_list=return_list)
@@ -121,7 +126,8 @@ def write_import_list(file_obj, import_list):
 
 def document_module(module_path, file_obj):
     module_name = module_path.rstrip(".py").replace("./","").replace(".","").replace("\\",".").replace("/",".").lstrip(".")
-    print(f"\ndebug: {module_name}")
+    
+    file_obj.write("# {}\n".format(str(module_name)))
     with open(module_path, "r") as f:
         current_class = None
         current_function = None
@@ -142,7 +148,7 @@ def document_module(module_path, file_obj):
                 current_class = line.split("class ")[1].split("(")[0]
                 inheritance_list = get_f_args(line)
                 attribute_list = get_attributes(line_list, idx)
-                write_data(file_obj, current_module=current_module, annotation_list=None, current_class=current_class,\
+                write_data(file_obj, current_module=current_module, dep_list=None, annotation_list=None, current_class=current_class,\
                         inheritance_list=inheritance_list, attribute_list=attribute_list, current_function=None,
                         args_list=None, return_list=None, exception_list=None)
             else:
@@ -159,7 +165,8 @@ def document_module(module_path, file_obj):
                 return_list = get_thingy("return", line_list, idx)
                 exception_list = get_thingy("raise", line_list, idx)
                 annotation_list = get_annotation_list(line_list, idx)
-                write_data(file_obj, current_module, annotation_list, current_class, inheritance_list, attribute_list, current_function, args_list, return_list, exception_list)
+                dep_list = get_deps(line_list, idx)
+                write_data(file_obj, current_module, dep_list, annotation_list, current_class, inheritance_list, attribute_list, current_function, args_list, return_list, exception_list)
               
             elif line.startswith(" ") and "def " in line:
                 current_function = line.split("def ")[1].split("(")[0]
@@ -167,7 +174,8 @@ def document_module(module_path, file_obj):
                 return_list = get_thingy("return", line_list, idx)
                 exception_list = get_thingy("raise", line_list, idx)
                 annotation_list = get_annotation_list(line_list, idx)
-                write_data(file_obj, current_module, annotation_list, current_class, inheritance_list, attribute_list, current_function, args_list, return_list, exception_list)
+                dep_list = get_deps(line_list, idx)
+                write_data(file_obj, current_module, dep_list, annotation_list, current_class, inheritance_list, attribute_list, current_function, args_list, return_list, exception_list)
               
 
             
