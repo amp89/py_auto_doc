@@ -103,8 +103,8 @@ def get_import_list(line_list):
 
 def write_lines(file_obj, header, iter_list):
     if iter_list:
-        sys.stdout.write("\n\n#### {}".format(str(header)))
-        file_obj.write("\n\n#### {}".format(str(header)))
+        sys.stdout.write("\n\n##### {}".format(str(header)))
+        file_obj.write("\n\n##### {}".format(str(header)))
         for i in iter_list:
             this_line = "\n- {}".format(str(i))
             sys.stdout.write(this_line)
@@ -116,7 +116,7 @@ def write_data(file_obj, current_module=None, dep_list=None, annotation_list=Non
 
     full_module_parts_list = list(filter(lambda x: x, [current_module,current_class,current_function]))
     full_module_str = ".".join(full_module_parts_list)
-    full_module_str = "\n\n{}".format(str(full_module_str))
+    full_module_str = "\n\n####{}".format(str(full_module_str))
 
     sys.stdout.write(full_module_str)
     file_obj.write(full_module_str)
