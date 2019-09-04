@@ -31,15 +31,15 @@ def get_thingy(type_of_thingy, line_list, idx, pause_characters=False):
     
     return_list = []
     if pause_characters == True and ("'''" in line_list[idx] or  '"""' in line_list[idx]):
-        
-        return_list = get_thingy(type_of_thingy, line_list, idx+1, pause_characters=False)
+        if idx+1 < len(line_list):
+            return_list = get_thingy(type_of_thingy, line_list, idx+1, pause_characters=False)
     elif pause_characters == True and not ("'''" in line_list[idx] or  '"""' in line_list[idx]):
-        
-        return_list = get_thingy(type_of_thingy, line_list, idx+1, pause_characters=pause_characters)
+        if idx+1 < len(line_list):
+            return_list = get_thingy(type_of_thingy, line_list, idx+1, pause_characters=pause_characters)
         
     elif pause_characters == False and ("'''" in line_list[idx] or  '"""' in line_list[idx]):
-        
-        return_list = get_thingy(type_of_thingy, line_list, idx+1, pause_characters=True)
+        if idx+1 < len(line_list):
+            return_list = get_thingy(type_of_thingy, line_list, idx+1, pause_characters=True)
     else:
 
         if line_list[idx].startswith(" ") and line_list[idx].strip().split(" ")[0] == str(type_of_thingy):
