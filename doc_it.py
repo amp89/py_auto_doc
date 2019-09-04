@@ -7,7 +7,7 @@ DEP_RE = re.compile(r"(\s*\.*)(\w+\()")
 run from root dir of project
 '''
 EXCLUDE_DIR = ["venv", ".ipynb_checkpoints","ipynb"]
-EXCLUDE_FILE = ["__init__", "doc_it]
+EXCLUDE_FILE = ["__init__"]
 EXCLUDE_DEPS = ["print","list","enumerate","Exception"]
 
 def get_annotation_list(line_list, idx):
@@ -70,6 +70,7 @@ def get_attributes(line_list, idx):
     return attr_list
 
 def get_deps(line_list, idx):
+    return None
     return_list = []
     if not line_list[idx].strip().startswith("def") and not line_list[idx].strip().startswith("class") \
             and ")" in line_list[idx].split("#")[0].strip() and "(" in line_list[idx].split("#")[0].strip():
