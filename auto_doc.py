@@ -142,6 +142,7 @@ def document_module(module_path, file_obj):
     module_name = module_path.rstrip(".py").replace("./","").replace(".","").replace("\\",".").replace("/",".").lstrip(".")
     
     file_obj.write("\n\n# {}\n".format(str(module_name)))
+    sys.stdout.write("\n\n# {}\n".format(str(module_name)))
     with open(module_path, "r") as f:
         current_class = None
         current_function = None
