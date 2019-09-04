@@ -19,7 +19,10 @@ def get_annotation_list(line_list, idx):
     return annotation_list
                 
 def get_f_args(line):
-    arg_csv = line.split("(")[1].split(")")[0]
+    try:
+        arg_csv = line.split("(")[1].split(")")[0]
+    except IndexError:
+        return []
     arg_list = [a.strip() for a in arg_csv.split(",") if a != ""]
     return arg_list
 
