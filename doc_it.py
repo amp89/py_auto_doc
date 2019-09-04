@@ -7,7 +7,7 @@ DEP_RE = re.compile(r"(\s*\.*)(\w+\()")
 run from root dir of project
 '''
 EXCLUDE_DIR = ["venv", ".ipynb_checkpoints","ipynb"]
-EXCLUDE_FILE = ["__init__"]
+EXCLUDE_FILE = ["__init__", "doc_it]
 EXCLUDE_DEPS = ["print","list","enumerate","Exception"]
 
 def get_annotation_list(line_list, idx):
