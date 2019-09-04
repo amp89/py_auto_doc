@@ -103,10 +103,10 @@ def get_import_list(line_list):
 
 def write_lines(file_obj, header, iter_list):
     if iter_list:
-        sys.stdout.write("\n{}:".format(str(header)))
-        file_obj.write("\n{}:".format(str(header)))
+        sys.stdout.write("\n\n{}:".format(str(header)))
+        file_obj.write("\n\n{}:".format(str(header)))
         for i in iter_list:
-            this_line = "\n- {}".format(str(i))
+            this_line = "\n\n- {}".format(str(i))
             sys.stdout.write(this_line)
             file_obj.write(this_line)
 
